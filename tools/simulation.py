@@ -283,7 +283,17 @@ class WeatherSimulation(threading.Thread):
         log_path = os.path.join(self.output_dir, 'automate_log.txt')
         log_fp = open(log_path, 'a+')
         # self._print(self.output_dir)
-        self.child = PopenSpawn(os.path.join(self.bin_folder, 'AHLSimulation'), cwd=self.output_dir, logfile=logwriter(log_fp))
+
+        # Set LD_LIBRARY_PATH for Boost 1.62.0 and other libraries
+        env = os.environ.copy()
+        home = os.path.expanduser('~')
+        boost_lib_home = os.path.join(home, 'boost_1_62_0', 'lib')
+        boost_lib_local = os.path.join(os.getcwd(), '3rdparty', 'weather-particle-simulator', 'boost_1_62_0', 'stage', 'lib')
+        osg_lib = os.path.join(os.getcwd(), '3rdparty', 'osg', 'build', 'lib')
+        existing_ld_path = env.get('LD_LIBRARY_PATH', '')
+        env['LD_LIBRARY_PATH'] = f"{boost_lib_home}:{boost_lib_local}:{osg_lib}:/usr/local/lib:/usr/local/lib64:{existing_ld_path}"
+
+        self.child = PopenSpawn(os.path.join(self.bin_folder, 'AHLSimulation'), cwd=self.output_dir, logfile=logwriter(log_fp), env=env)
 
         try:
             self._print("In main menu")
