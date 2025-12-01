@@ -1,0 +1,51 @@
+# Git files
+.git
+.gitignore
+.gitmodules
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.pytest_cache
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Data and output directories (keep structure but exclude large files)
+data/output/
+data/tmp/
+*.avi
+*.mp4
+*.png
+*.jpg
+*.jpeg
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Exclude reference projects to reduce build context
+refproj/
+
+# Development toolkit
+weather_dev_toolkit/

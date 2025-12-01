@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  rain-rendering:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rain-rendering:latest
+    container_name: rain-rendering
+    volumes:
+      # Mount current directory to /workspace
+      - .:/workspace
+      # Mount directories (like SLAMPerturbationLab)
+      - ./datasets:/datasets
+      - ./results:/results
+      - ./output:/output
+      - ./configs:/configs
+      - ./data:/data
+      # For X11 forwarding on Linux
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    working_dir: /workspace
+    environment:
+      - DISPLAY=${DISPLAY}
+    # Keep container running
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  # Service for running the main script
+  rain-rendering-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rain-rendering:latest
+    container_name: rain-rendering-runner
+    volumes:
+      - .:/workspace
+      - ./datasets:/datasets
+      - ./results:/results
+      - ./output:/output
+      - ./configs:/configs
+      - ./data:/data
+    working_dir: /workspace
+    environment:
+      - DISPLAY=${DISPLAY}
+    stdin_open: true
+    tty: true
+    command: python3 main_threaded.py
